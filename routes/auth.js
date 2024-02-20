@@ -1,7 +1,8 @@
 const express = require("express");
+const Auth = require("../middleware/auth");
 
 // get all the handlers
-const { handleGetLogin, handleLoginPost, handleGetRegister, handleRegisterPost } = require("../controllers/authController");
+const { handleGetLogin, handleLoginPost, handleGetRegister, handleRegisterPost, handleLogout } = require("../controllers/authController");
 
 const authRouter = express.Router();
 
@@ -10,6 +11,8 @@ const authRouter = express.Router();
 authRouter.get("/login", handleGetLogin);
 
 authRouter.post("/login", handleLoginPost);
+
+authRouter.get("/logout", Auth(), handleLogout);
 
 authRouter.get("/register", handleGetRegister);
 

@@ -32,5 +32,9 @@ const authRouter = require("./routes/auth");
 app.use("/auth", authRouter);
 
 
+// set '/' point to /url
+app.get("/", async (req, res) => res.redirect("/url"));
+
+
 
 app.listen(PORT, () => console.log("Server is running on port " + String(PORT)));

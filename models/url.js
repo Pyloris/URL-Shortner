@@ -13,7 +13,8 @@ const urlSchema = new mongoose.Schema({
     userRef: {
         type: mongoose.Types.ObjectId,
         required: true
-    }
+    },
+    clicks: []
 }, { timestamps: true });
 
 

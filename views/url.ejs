@@ -1,0 +1,32 @@
+
+
+<body>
+
+    <h1>URL page</h1>
+    <a href="/auth/logout">Logout</a><br/>
+    SHORTEN URL
+    <input type="text" placeholder="Enter URL">
+    <button onclick="makeShort()">make Short</button>
+
+    <ul>
+        <% for (let url of urls) { %>
+            <li><%= currentUser.role == "ADMIN" ? users.find(user => user._id.toString() == url.userRef).name + " created : " : "" %> <a href="http://localhost:8000/url/<%= url.shortID %>"><%= url.shortID %></a> => <a href="/url/analytics/<%= url.shortID %>">Analytics</a></li>
+        <% } %>
+    </ul>
+
+    <script>
+        const btn = document.querySelector("button");
+        const input = document.querySelector("input");
+
+        function makeShort() {
+            const url = input.value;
+
+            fetch("/url", {method: "POST", headers: {'Content-Type':'application/x-www-form-urlencoded'}, body: `url=${url}`})
+            .then((res) => {
+                if (res.status == 200)
+                    document.location = "/url";
+            });
+        }
+    </script>
+    
+</body>

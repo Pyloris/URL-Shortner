@@ -3,9 +3,7 @@ const jwt = require("jsonwebtoken");
 // set a secret
 const secret = process.env.SECRET_PASS; 
 
-function Auth(roles) {
-
-    console.log(roles);
+function Auth(roles=["USER", "ADMIN"]) {
 
     return function (req, res, next) {
         try {
@@ -13,19 +11,18 @@ function Auth(roles) {
 
             jwt.verify(token, secret, (err, decoded) => {
                 if (err)
-                    return res.status(200).json({status: "Invalid JWT"});
+                    return res.redirect("/auth/login");
 
-                req.userId = decoded.userId;
+                req.user = decoded;
 
                 if (roles.includes(decoded.role))
                     next();
                 else
-                    return res.status(200).json({status: "Not Authorized"});
+                    return res.redirect("/auth/login"); 
             });
         }
         catch(err) {
-            console.log("hello");
-            res.status(200).json({status: "Not Authorized"});
+            return res.redirect("/auth/login");
         }
 
     }

@@ -1,6 +1,6 @@
 const User = require("../models/auth");
 const jwt = require("jsonwebtoken");
-
+const bcrypt = require("bcrypt");
 
 const secret = process.env.SECRET_PASS;
 
@@ -19,13 +19,18 @@ const handleLoginPost = async (req, res) => {
     if (!body.email || !body.password)
         return res.status(200).json({status: "Error: some fields are missing"});
 
-    // create the user
-    const user = await User.findOne({
+    const user_details = {
         email: body.email,
-        password: body.password
-    });
+    }
 
-    if (!user) {
+    // create the user
+    const user = await User.findOne(user_details);
+    if (!user)
+        return res.redirect("/auth/register");
+
+    const passwords_match = await bcrypt.compare(body.password, user?.password);
+
+    if (!passwords_match) {
         return res.json({error: "wrong email/password"});
     }
 
@@ -50,10 +55,12 @@ const handleRegisterPost = async (req, res) => {
     if (!body.name || !body.email || !body.password)
         return res.json({error: "fields are missing"});
 
+    const pwd = await bcrypt.hash(body.password, 2);
+
     const user = await User.create({
         name: body.name,
         email: body.email,
-        password: body.password,
+        password: pwd,
         role: "USER"
     });
 
@@ -66,10 +73,21 @@ const handleRegisterPost = async (req, res) => {
 
 
 
+const handleLogout = async (req, res) => {
+    if (req.user)
+        delete req.user;
+    else
+        return res.status(200).json({msg: "bhai login to kar"});
+    return res.clearCookie("token").redirect("/auth/login");
+}
+
+
+
 
 module.exports = {
     handleGetLogin,
     handleLoginPost,
     handleGetRegister,
-    handleRegisterPost
+    handleRegisterPost,
+    handleLogout
 }

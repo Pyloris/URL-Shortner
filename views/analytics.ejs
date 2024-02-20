@@ -1,0 +1,11 @@
+<body>
+
+    <h1>Analytics</h1>
+
+    <p>Clicks on the short URL</p>
+    <ul>
+        <% for (let timestamp of url.clicks) { %>
+            <li><%= (new Date(timestamp)).getFullYear() %>-<%= (new Date(timestamp)).getMonth() + 1 %>-<%= (new Date(timestamp)).getDate() %> <%= (new Date(timestamp)).getHours() %>:<%= (new Date(timestamp)).getMinutes() %>:<%= (new Date(timestamp)).getSeconds() %></li>
+        <% } %>
+    </ul>
+</body>

@@ -1,5 +1,5 @@
 const express = require("express");
-const { handleURLPage, handleURL, handleURLId } = require("../controllers/urlController");
+const { handleURLPage, handleURL, handleURLId, handleAnalytics } = require("../controllers/urlController");
 
 const urlRouter = express.Router();
 
@@ -10,6 +10,7 @@ urlRouter.post("/", handleURL);
 
 urlRouter.get("/", handleURLPage);
 
+urlRouter.get("/analytics/:id", handleAnalytics);
 
 
 module.exports = urlRouter;
